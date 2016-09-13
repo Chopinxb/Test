@@ -1,0 +1,56 @@
+import java.util.Scanner;import java.util.Arrays;
+
+public class Practice {
+    static Scanner s = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        String strA, strB = new String(); // 声明2个String对象来装在2个加数a,b
+        strA = s.nextLine();
+        strB = s.nextLine();
+        int[] A = new int[strA.length()]; // 定义个A数组
+        int[] B = new int[strB.length()]; // 定义个B数组
+        // 根据题目意思，A[0]装a的个位，A[1]装a的十位……所以需要将字符串进行反转(因为个位在字符串末尾)
+        for (int i = 0; i < strA.length(); i++) {
+            A[strA.length() - 1 - i] = (strA.charAt(i) - 48); // 减48，将ASCII码转换为数字
+        }
+        for (int i = 0; i < strB.length(); i++) {
+            B[B.length - 1 - i] = (strB.charAt(i) - 48); // 减48，将ASCII码转换为数字
+        }
+        // 下面就应该进行加法运算了 ,对于结果C的长度，应该是2个加数的最大位数+1。
+        int maxLen = A.length > B.length ? A.length : B.length;
+        int[] C = new int[maxLen + 1];
+
+        // minLen用来规定2个数的加法次数
+        int minLen = A.length < B.length ? A.length : B.length;
+
+        int r = 0; // 用来保留整数部分
+        for (int i = 0; i < minLen; i++) {
+            int temp = A[i] + B[i] + r; // 进行加法
+            r = temp / 10; // r用来保留进位
+            C[i] = temp % 10; // C中只保留一位数字
+        }
+        if (A.length > B.length) { // 如果A的位数比B的多，则把A的数字放入C里面
+            for (int i = B.length; i < maxLen; i++) { // 从B.length开始操作
+                int temp = A[i] + r;
+                r = temp / 10;
+                C[i] = temp % 10;
+            }
+        } else if (A.length < B.length) {
+            for (int i = A.length; i < maxLen; i++) { // 从A.length开始操作
+                int temp = B[i] + r;
+                r = temp / 10;
+                C[i] = temp % 10;
+            }
+        }
+        if (r != 0) { // 如果r还有值的话，就将r加在最高位上
+            C[C.length - 1] += r;
+        }
+        // 判断一下最高位是否为0，如果为0则把这个0给去掉
+        if (C[C.length - 1] == 0) {
+            C = Arrays.copyOfRange(C, 0, C.length - 1);
+        }
+        for (int i = 0; i < C.length; i++) {
+            System.out.print(C[C.length - 1 - i]);
+        }
+    }
+}
